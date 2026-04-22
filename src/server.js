@@ -4,8 +4,9 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const productsPath = path.join(__dirname, 'data', 'products.json');
-const newsletterPath = path.join(__dirname, 'data', 'newsletter-emails.json');
+const rootDir = path.join(__dirname, '..');
+const productsPath = path.join(rootDir, 'data', 'products.json');
+const newsletterPath = path.join(rootDir, 'data', 'newsletter-emails.json');
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -17,7 +18,7 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use(express.static(__dirname));
+app.use(express.static(path.join(rootDir, 'public')));
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
