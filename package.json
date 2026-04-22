@@ -1,0 +1,12 @@
+{
+  "name": "fcs-mart-bd",
+  "version": "1.0.0",
+  "description": "Fashion landing page with API-backed products and newsletter capture",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

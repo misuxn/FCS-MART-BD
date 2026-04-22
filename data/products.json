@@ -1,0 +1,42 @@
+[
+  {
+    "id": "p1",
+    "title": "Hoodies & Sweatshirt",
+    "image": "assets/images/sectionsImages/Rectangle 20.png",
+    "category": "New Arrivals",
+    "price": 39.99,
+    "isFeatured": false
+  },
+  {
+    "id": "p2",
+    "title": "Coats & Parkas",
+    "image": "assets/images/sectionsImages/Rectangle 21.png",
+    "category": "New Arrivals",
+    "price": 64.5,
+    "isFeatured": false
+  },
+  {
+    "id": "p3",
+    "title": "Tees & T-Shirt",
+    "image": "assets/images/sectionsImages/Rectangle 22.png",
+    "category": "New Arrivals",
+    "price": 24,
+    "isFeatured": false
+  },
+  {
+    "id": "p4",
+    "title": "Trending on instagram",
+    "image": "assets/images/sectionsImages/Rectangle 49.png",
+    "category": "Young’s Favourite",
+    "price": 34,
+    "isFeatured": true
+  },
+  {
+    "id": "p5",
+    "title": "All Under $40",
+    "image": "assets/images/sectionsImages/Rectangle 50.png",
+    "category": "Young’s Favourite",
+    "price": 40,
+    "isFeatured": true
+  }
+]

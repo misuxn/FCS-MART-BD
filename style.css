@@ -1,0 +1,795 @@
+:root {
+  --bg: #f5f5f5;
+  --text: #1b1b1b;
+  --muted: #6f6f6f;
+  --yellow: #ebd96b;
+  --dark: #000;
+  --white: #fff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.4;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.wrapper {
+  width: min(1120px, 92%);
+  margin: 0 auto;
+}
+
+.header {
+  padding: 2rem 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 800;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+}
+
+.brand img {
+  width: 24px;
+  height: 24px;
+}
+
+.nav {
+  display: flex;
+  gap: 2rem;
+  margin-left: auto;
+}
+
+.nav-signup {
+  display: none;
+}
+
+.menu-toggle {
+  display: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.menu-toggle span {
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--text);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.btn {
+  border: 0;
+  border-radius: 6px;
+  padding: 0.72rem 1.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-dark {
+  background: var(--dark);
+  color: var(--white);
+}
+
+.header-signup {
+  margin-left: 1rem;
+}
+
+.hero {
+  background: #ebebeb;
+  border-radius: 34px;
+  padding: 2rem 2rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  overflow: hidden;
+}
+
+.hero-text {
+  padding: 1rem 0 3rem;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4.8vw, 5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  margin-bottom: 1rem;
+}
+
+.hero .strip {
+  display: block;
+  width: fit-content;
+  padding: 0 0.3rem;
+  margin-bottom: 0.35rem;
+}
+
+.strip-white {
+  background: var(--white);
+}
+
+.strip-yellow {
+  background: var(--yellow);
+}
+
+.hero p {
+  font-size: 1.06rem;
+  margin-bottom: 1.7rem;
+}
+
+.hero-image img {
+  width: 100%;
+  object-fit: contain;
+}
+
+.brands {
+  margin-top: 2rem;
+  background: var(--yellow);
+  padding: 1.45rem 0;
+}
+
+.brands-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.brands-row img {
+  max-height: 28px;
+  object-fit: contain;
+  margin-inline: auto;
+}
+
+.content {
+  padding: 4rem 0 3rem;
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  margin-bottom: 2rem;
+  font-weight: 900;
+}
+
+.cards {
+  display: grid;
+  gap: 1.6rem;
+}
+
+.three-col {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.two-col {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card img {
+  border-radius: 16px;
+  width: 100%;
+}
+
+.card-top {
+  position: relative;
+}
+
+.fav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #222;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.fav-btn.is-active {
+  background: #ffebeb;
+  color: #d62d2d;
+}
+
+.card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.7rem;
+  gap: 0.5rem;
+}
+
+.card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.1rem;
+}
+
+.card p {
+  color: var(--muted);
+}
+
+.card-meta {
+  font-size: 0.88rem;
+  color: #8a8a8a;
+}
+
+.price {
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin-top: 0.12rem;
+}
+
+.arrow {
+  font-size: 1.35rem;
+  color: #7c7c7c;
+}
+
+.payday {
+  margin-top: 2.5rem;
+  background: var(--yellow);
+}
+
+.payday-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+.payday-img {
+  padding-top: 1.6rem;
+}
+
+.payday-text {
+  padding: 2.5rem 1rem 2.5rem 2rem;
+}
+
+.payday h2 {
+  font-size: clamp(2rem, 3.2vw, 4rem);
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 1.3rem;
+}
+
+.payday h2 .strip {
+  display: block;
+  width: fit-content;
+  padding: 0 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.payday p {
+  max-width: 420px;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.payday h4 {
+  margin-top: 1.1rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.payday small {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 1.3rem;
+}
+
+.favourite {
+  padding: 4.5rem 0;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2rem;
+  padding: 0 0 5rem;
+}
+
+.app h2 {
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 1.15;
+  margin-bottom: 0.8rem;
+  font-weight: 900;
+}
+
+.app p {
+  max-width: 360px;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+}
+
+.stores {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.stores a {
+  display: inline-block;
+}
+
+.stores img {
+  height: 45px;
+  width: auto;
+}
+
+.app-image img {
+  width: min(400px, 100%);
+  margin-inline: auto;
+}
+
+.newsletter {
+  background: #e5c643;
+  text-align: center;
+  padding: 4.3rem 0;
+}
+
+.newsletter h2 {
+  color: var(--white);
+  font-size: clamp(1.8rem, 3vw, 3.2rem);
+  line-height: 1.2;
+  max-width: 760px;
+  margin: 0 auto 0.7rem;
+  font-weight: 900;
+}
+
+.newsletter p {
+  color: #f8f8f8;
+  margin-bottom: 1.2rem;
+}
+
+.newsletter-message {
+  margin-top: 0.8rem;
+  min-height: 1.4rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.newsletter-message.error {
+  color: #3b1a1a;
+}
+
+.subscribe {
+  background: var(--white);
+  width: min(560px, 100%);
+  margin: 0 auto;
+  padding: 0.55rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.subscribe input {
+  border: 0;
+  outline: none;
+  flex: 1;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.6rem;
+}
+
+.footer {
+  background: #000;
+  color: #fff;
+  padding: 4rem 0;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 2rem;
+}
+
+.brand-footer {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.brand-footer img {
+  filter: brightness(0) invert(1);
+}
+
+.footer p {
+  color: #8e8e8e;
+  max-width: 320px;
+}
+
+.socials {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.8rem;
+}
+
+.socials span {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: var(--yellow);
+  color: #000;
+  font-weight: 700;
+}
+
+.footer h4 {
+  margin-bottom: 0.9rem;
+}
+
+.footer a {
+  display: block;
+  color: #8e8e8e;
+  text-decoration: none;
+  margin-bottom: 0.65rem;
+}
+
+@media (max-width: 1200px) {
+  .wrapper {
+    width: min(1040px, 94%);
+  }
+
+  .hero {
+    border-radius: 28px;
+    padding: 1.5rem 1.5rem 0;
+  }
+
+  .payday-text {
+    padding: 2rem 1rem 2rem 1.5rem;
+  }
+
+  .payday p {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .wrapper {
+    width: min(880px, 94%);
+  }
+
+  .header {
+    position: relative;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding-top: 1.4rem;
+    row-gap: 0;
+  }
+
+  .brand {
+    font-size: 1.35rem;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .header-signup {
+    display: none;
+  }
+
+  .nav {
+    position: absolute;
+    top: calc(100% + 0.55rem);
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1rem;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+  }
+
+  .header.nav-open .nav {
+    display: flex;
+  }
+
+  .header.nav-open .menu-toggle span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .header.nav-open .menu-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .header.nav-open .menu-toggle span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .nav a {
+    font-size: 0.9rem;
+    padding: 0.2rem 0;
+  }
+
+  .nav .nav-signup {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--dark);
+    color: var(--white);
+    border-radius: 6px;
+    padding: 0.55rem 1rem;
+    width: fit-content;
+  }
+
+  .hero,
+  .payday-grid,
+  .app,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 1.5rem 1.2rem 1rem;
+    text-align: center;
+  }
+
+  .hero-text {
+    padding: 0.5rem 0 1.2rem;
+  }
+
+  .hero .strip {
+    margin-inline: auto;
+  }
+
+  .hero p {
+    font-size: 0.98rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .hero-image img {
+    max-width: 80%;
+    margin: 0 auto;
+  }
+
+  .brands-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .three-col,
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .payday p {
+    font-size: 1.1rem;
+  }
+
+  .payday h4 {
+    font-size: 1.35rem;
+  }
+
+  .payday small {
+    font-size: 0.98rem;
+  }
+
+  .payday-text {
+    text-align: center;
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .payday h2 .strip {
+    margin-inline: auto;
+  }
+
+  .payday p {
+    margin-inline: auto;
+  }
+
+  .app {
+    gap: 1.2rem;
+    padding-bottom: 4rem;
+  }
+
+  .app-text {
+    text-align: center;
+  }
+
+  .app p {
+    margin-inline: auto;
+  }
+
+  .stores {
+    justify-content: center;
+  }
+
+  .footer-grid {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    width: min(700px, 92%);
+  }
+
+  .content {
+    padding: 3rem 0 2.5rem;
+  }
+
+  .section-title {
+    margin-bottom: 1.35rem;
+  }
+
+  .favourite {
+    padding: 3.2rem 0;
+  }
+
+  .brands {
+    margin-top: 1.4rem;
+    padding: 1rem 0;
+  }
+
+  .brands-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .brands-row img {
+    max-height: 22px;
+  }
+
+  .newsletter {
+    padding: 3.4rem 0;
+  }
+
+  .subscribe {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+
+  .subscribe .btn {
+    width: 100%;
+  }
+
+  .footer {
+    padding: 3rem 0;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 576px) {
+  .wrapper {
+    width: 92%;
+  }
+
+  .header {
+    justify-content: space-between;
+    row-gap: 0.7rem;
+  }
+
+  .brand {
+    font-size: 1.15rem;
+  }
+
+  .brand img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .btn {
+    padding: 0.62rem 1rem;
+    font-size: 0.78rem;
+  }
+
+  .nav a {
+    font-size: 0.76rem;
+  }
+
+  .nav {
+    top: calc(100% + 0.45rem);
+    padding: 0.85rem;
+    gap: 0.75rem;
+  }
+
+  .hero {
+    border-radius: 20px;
+    padding: 1.1rem 0.9rem 0.8rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.7rem, 10vw, 2.3rem);
+  }
+
+  .hero .strip {
+    margin-bottom: 0.2rem;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+  }
+
+  .card h3 {
+    font-size: 1rem;
+  }
+
+  .card p {
+    font-size: 0.86rem;
+  }
+
+  .payday {
+    margin-top: 2rem;
+  }
+
+  .payday-text {
+    padding: 1rem 0.7rem 1.4rem;
+  }
+
+  .payday p {
+    font-size: 0.98rem;
+  }
+
+  .payday h4 {
+    font-size: 1.2rem;
+  }
+
+  .payday small {
+    font-size: 0.9rem;
+  }
+
+  .stores {
+    flex-direction: column;
+  }
+
+  .stores img {
+    height: 42px;
+  }
+
+  .newsletter h2 {
+    font-size: clamp(1.3rem, 8vw, 1.8rem);
+  }
+
+  .newsletter p {
+    font-size: 0.9rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-footer {
+    font-size: 1.6rem;
+  }
+}

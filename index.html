@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fashion Landing Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header wrapper">
+      <div class="brand">
+        <img src="assets/logos/Vector.png" alt="Fashion logo icon" />
+        <span>FASHION</span>
+      </div>
+      <button class="menu-toggle" aria-label="Toggle menu" aria-controls="primary-nav" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="nav" id="primary-nav">
+        <a href="#">CATALOGUE</a>
+        <a href="#">FASHION</a>
+        <a href="#">FAVOURITE</a>
+        <a href="#">LIFESTYLE</a>
+        <a href="#" class="nav-signup">SIGN UP</a>
+      </nav>
+      <button class="btn btn-dark header-signup">SIGN UP</button>
+    </header>
+
+    <section class="hero wrapper">
+      <div class="hero-text">
+        <h1>
+          <span class="strip strip-white">LET’S</span>
+          <span class="strip strip-white">EXPLORE</span>
+          <span class="strip strip-yellow">UNIQUE</span>
+          <span class="strip">CLOTHES.</span>
+        </h1>
+        <p>Live for Influential and Innovative fashion!</p>
+        <button class="btn btn-dark">Shop Now</button>
+      </div>
+      <div class="hero-image">
+        <img src="assets/images/sectionsImages/home-img.png" alt="Hero fashion model" />
+      </div>
+    </section>
+
+    <section class="brands">
+      <div class="wrapper brands-row">
+        <img src="assets/logos/1.png" alt="H&M" />
+        <img src="assets/logos/2.png" alt="Obey" />
+        <img src="assets/logos/3.png" alt="Shopify" />
+        <img src="assets/logos/4.png" alt="Lacoste" />
+        <img src="assets/logos/5.png" alt="Levis" />
+        <img src="assets/logos/6.png" alt="Amazon" />
+      </div>
+    </section>
+
+    <main class="content wrapper">
+      <section class="arrivals">
+        <h2 class="section-title">NEW ARRIVALS</h2>
+        <div class="cards three-col" id="new-arrivals-grid"></div>
+      </section>
+    </main>
+
+    <section class="payday">
+      <div class="wrapper payday-grid">
+        <div class="payday-img">
+          <img src="assets/images/sectionsImages/image_12-removebg-preview.png" alt="Payday sale model" />
+        </div>
+        <div class="payday-text">
+          <h2>
+            <span class="strip strip-white">PAYDAY</span>
+            <span class="strip strip-yellow">SALE NOW</span>
+          </h2>
+          <p>Spend minimal $100 get 30% off voucher code for your next purchase</p>
+          <h4>1 June - 10 June 2021</h4>
+          <small>*Terms &amp; Conditions apply</small>
+          <button class="btn btn-dark">SHOP NOW</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="favourite wrapper">
+      <h2 class="section-title">Young’s Favourite</h2>
+      <div class="cards two-col" id="favourite-grid"></div>
+    </section>
+
+    <section class="app wrapper">
+      <div class="app-text">
+        <h2>DOWNLOAD APP &amp;<br />GET THE VOUCHER!</h2>
+        <p>Get 30% off for first transaction using Rondovision mobile app for now.</p>
+        <div class="stores">
+          <a href="https://www.apple.com/app-store/" target="_blank" rel="noopener noreferrer" aria-label="Open App Store">
+            <img src="assets/logos/Rectangle 18.png" alt="Download on App Store" />
+          </a>
+          <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer" aria-label="Open Google Play">
+            <img src="assets/logos/Rectangle 55.png" alt="Get it on Google Play" />
+          </a>
+        </div>
+      </div>
+      <div class="app-image">
+        <img src="assets/images/sectionsImages/Mobile app.png" alt="Shopping app screen" />
+      </div>
+    </section>
+
+    <section class="newsletter">
+      <div class="wrapper center">
+        <h2>JOIN SHOPPING COMMUNITY TO GET MONTHLY PROMO</h2>
+        <p>Type your email down below and be young wild generation</p>
+        <form class="subscribe" id="newsletter-form" action="#" novalidate>
+          <input id="newsletter-email" type="email" placeholder="Add your email here" required />
+          <button type="submit" class="btn btn-dark">SEND</button>
+        </form>
+        <p id="newsletter-message" class="newsletter-message" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="wrapper footer-grid">
+        <div>
+          <div class="brand brand-footer">
+            <img src="assets/logos/Vector.png" alt="Fashion logo icon" />
+            <span>FASHION</span>
+          </div>
+          <p>Complete your style with awesome clothes from us.</p>
+          <div class="socials">
+            <span>f</span>
+            <span>◉</span>
+            <span>◐</span>
+            <span>in</span>
+          </div>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Contact us</a>
+          <a href="#">Support</a>
+          <a href="#">Careers</a>
+        </div>
+        <div>
+          <h4>Quick Link</h4>
+          <a href="#">Share Location</a>
+          <a href="#">Orders Tracking</a>
+          <a href="#">Size Guide</a>
+          <a href="#">FAQs</a>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <a href="#">Terms &amp; conditions</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
