@@ -4,6 +4,7 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const isServerless = !!process.env.VERCEL;
 const rootDir = path.join(__dirname, '..');
 const productsPath = path.join(rootDir, 'data', 'products.json');
 const newsletterPath = path.join(rootDir, 'data', 'newsletter-emails.json');
@@ -63,10 +64,19 @@ app.post('/api/newsletter', async (req, res) => {
     createdAt: new Date().toISOString(),
   });
 
-  await writeJson(newsletterPath, rows);
+  try {
+    await writeJson(newsletterPath, rows);
+  } catch {
+    return res.status(503).json({ message: 'Storage is not writable in this deployment. Use a database service.' });
+  }
+
   return res.status(201).json({ message: 'Subscribed successfully!' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+if (!isServerless) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
