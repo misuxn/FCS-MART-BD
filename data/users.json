@@ -1,0 +1,34 @@
+[
+  {
+    "id": "cd753cae-62ca-4bea-9187-707614a50103",
+    "name": "Admin User",
+    "email": "admin@example.com",
+    "role": "admin",
+    "passwordHash": "$2a$10$TVaqlg5h4ubCYWBQT8USMOtG2J1sqa3mjkIg1j8dYdMDPdQxRQXrC",
+    "createdAt": "2026-04-23T05:35:46.509Z"
+  },
+  {
+    "id": "139dfefd-dfd8-4dc3-ae54-c0fe807df560",
+    "name": "Misu",
+    "email": "misu@gmail.com",
+    "role": "user",
+    "passwordHash": "$2a$10$UbuX8DYeVo2ni58RedKI8OD0kogDa0yMq2BRF3sXn7XAfruhs6use",
+    "createdAt": "2026-04-23T05:39:25.633Z"
+  },
+  {
+    "id": "bbcba819-df2d-4ed1-8bcc-3dcc789c3de0",
+    "name": "Test User",
+    "email": "user957931aa@example.com",
+    "role": "user",
+    "passwordHash": "$2a$10$lJ8xCwN3f6DN1gSTUUxHLuxbykPRN6GvtVW6pval0uQjByQ8XwxZm",
+    "createdAt": "2026-04-23T07:38:49.868Z"
+  },
+  {
+    "id": "32fa0e49-c762-497b-88f0-1029ef4b7e98",
+    "name": "Fahad Ahmed",
+    "email": "misuxn@gmail.com",
+    "role": "user",
+    "passwordHash": "$2a$10$6SboAYb9.cTth1nyZqow8upjZnyrAxPyFmTKhwAIFhOGY0yKhqwsO",
+    "createdAt": "2026-04-23T07:45:51.541Z"
+  }
+]

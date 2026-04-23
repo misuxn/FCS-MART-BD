@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - FCS Mart BD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-panel">
+        <div class="login-brand">
+          <img src="assets/logos/Vector.png" alt="Fashion logo" />
+          <span>FASHION</span>
+        </div>
+        <p class="eyebrow">Secure access</p>
+        <h1>Welcome back</h1>
+        <p class="subtitle">Login to continue shopping, save favorites, and access the admin dashboard if you are an administrator.</p>
+
+        <form id="login-form" class="login-form" novalidate>
+          <label>
+            <span>Email</span>
+            <input id="login-email" type="email" placeholder="you@example.com" required />
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="login-password" type="password" placeholder="Your password" required />
+          </label>
+          <button class="btn btn-dark" type="submit">Login</button>
+        </form>
+
+        <p id="login-message" class="login-message" aria-live="polite"></p>
+
+        <div class="login-footer">
+          <a href="/">Back to home</a>
+          <a href="/signup.html">Create account</a>
+        </div>
+      </section>
+
+      <section class="login-visual">
+        <div class="login-card">
+          <img src="assets/images/sectionsImages/home-img.png" alt="Fashion model" />
+          <div class="login-card-copy">
+            <span class="badge">Fast checkout</span>
+            <h2>One secure account for shopping and management</h2>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="login.js"></script>
+  </body>
+</html>

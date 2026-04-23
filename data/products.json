@@ -38,5 +38,13 @@
     "category": "Young’s Favourite",
     "price": 40,
     "isFeatured": true
+  },
+  {
+    "id": "0ce35fa2-ccf6-48b1-8264-19eac6d56f80",
+    "title": "Test",
+    "image": "assets/images/sectionsImages/Rectangle 21.png",
+    "category": "Bag",
+    "price": 20,
+    "isFeatured": false
   }
 ]

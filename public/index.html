@@ -28,9 +28,14 @@
         <a href="#">FASHION</a>
         <a href="#">FAVOURITE</a>
         <a href="#">LIFESTYLE</a>
-        <a href="#" class="nav-signup">SIGN UP</a>
+        <a href="/account.html" id="nav-account-link" hidden>ACCOUNT</a>
+        <a href="/signup.html" id="nav-signup-link">SIGN UP</a>
+        <a href="/login.html" id="nav-login-link">LOGIN</a>
+        <a href="/admin.html" id="nav-admin-link" hidden>ADMIN</a>
       </nav>
-      <button class="btn btn-dark header-signup">SIGN UP</button>
+      <button class="cart-btn" id="cart-toggle" aria-label="Open shopping cart">
+        🛒 <span id="cart-count" class="cart-count">0</span>
+      </button>
     </header>
 
     <section class="hero wrapper">
@@ -119,6 +124,40 @@
         <p id="newsletter-message" class="newsletter-message" aria-live="polite"></p>
       </div>
     </section>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="cart-modal" hidden>
+      <div class="cart-overlay"></div>
+      <div class="cart-panel">
+        <div class="cart-header">
+          <h2>Shopping Cart</h2>
+          <button class="cart-close" id="cart-close-btn" aria-label="Close cart">✕</button>
+        </div>
+        <div id="cart-items" class="cart-items"></div>
+        <div class="cart-footer">
+          <div class="checkout-fields">
+            <input id="checkout-full-name" type="text" placeholder="Full name" />
+            <input id="checkout-phone" type="text" placeholder="Phone number" />
+            <input id="checkout-address" type="text" placeholder="Delivery address" />
+            <div class="checkout-row">
+              <input id="checkout-city" type="text" placeholder="City" />
+              <input id="checkout-postal" type="text" placeholder="Postal code" />
+            </div>
+            <select id="checkout-payment-method" aria-label="Select payment method">
+              <option value="">Select payment method</option>
+              <option value="cash_on_delivery">Cash on Delivery</option>
+              <option value="card">Card Payment</option>
+              <option value="mobile_banking">Mobile Banking</option>
+            </select>
+          </div>
+          <div class="cart-total">
+            <strong>Total: <span id="cart-total">$0.00</span></strong>
+          </div>
+          <button id="checkout-btn" class="btn btn-dark cart-checkout">Proceed to Checkout</button>
+          <p id="cart-message" class="cart-message" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
 
     <footer class="footer">
       <div class="wrapper footer-grid">

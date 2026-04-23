@@ -1,0 +1,174 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+  color: #111827;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.login-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(320px, 480px) 1fr;
+}
+
+.login-panel {
+  background: #fff;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  font-size: 1.3rem;
+}
+
+.login-brand img {
+  width: 24px;
+  height: 24px;
+}
+
+.eyebrow {
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.login-panel h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+.subtitle {
+  color: #6b7280;
+  max-width: 420px;
+}
+
+.login-form {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.login-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.login-form input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  font: inherit;
+}
+
+.btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-dark {
+  background: #111827;
+  color: #fff;
+}
+
+.login-message {
+  min-height: 1.4rem;
+  font-weight: 600;
+}
+
+.login-message.error {
+  color: #b91c1c;
+}
+
+.login-footer {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.login-footer a {
+  color: #111827;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.login-visual {
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  width: min(640px, 100%);
+  background: rgba(255, 255, 255, 0.66);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(17, 24, 39, 0.12);
+}
+
+.login-card img {
+  width: 100%;
+  height: min(70vh, 680px);
+  object-fit: cover;
+}
+
+.login-card-copy {
+  padding: 1.25rem;
+}
+
+.badge {
+  display: inline-flex;
+  background: #ebd96b;
+  color: #111827;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  margin-bottom: 0.8rem;
+}
+
+.login-card-copy h2 {
+  font-size: clamp(1.2rem, 2vw, 1.75rem);
+  line-height: 1.25;
+}
+
+@media (max-width: 900px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .login-visual {
+    padding-top: 0;
+  }
+
+  .login-card img {
+    height: 360px;
+  }
+}

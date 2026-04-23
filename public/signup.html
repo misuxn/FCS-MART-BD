@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - FCS Mart BD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-panel">
+        <div class="login-brand">
+          <img src="assets/logos/Vector.png" alt="Fashion logo" />
+          <span>FASHION</span>
+        </div>
+        <p class="eyebrow">Create account</p>
+        <h1>Join FCS Mart</h1>
+        <p class="subtitle">Sign up to save favourites, place orders, and track your shopping experience.</p>
+
+        <form id="signup-form" class="login-form" novalidate>
+          <label>
+            <span>Full name</span>
+            <input id="signup-name" type="text" placeholder="Your name" required />
+          </label>
+          <label>
+            <span>Email</span>
+            <input id="signup-email" type="email" placeholder="you@example.com" required />
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="signup-password" type="password" placeholder="At least 6 characters" minlength="6" required />
+          </label>
+          <label>
+            <span>Confirm password</span>
+            <input id="signup-confirm-password" type="password" placeholder="Re-enter password" minlength="6" required />
+          </label>
+          <button class="btn btn-dark" type="submit">Create Account</button>
+        </form>
+
+        <p id="signup-message" class="login-message" aria-live="polite"></p>
+
+        <div class="login-footer">
+          <a href="/">Back to home</a>
+          <a href="/login.html">Already have an account? Login</a>
+        </div>
+      </section>
+
+      <section class="login-visual">
+        <div class="login-card">
+          <img src="assets/images/sectionsImages/home-img.png" alt="Fashion model" />
+          <div class="login-card-copy">
+            <span class="badge">New account</span>
+            <h2>Start shopping in seconds with one secure profile</h2>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="signup.js"></script>
+  </body>
+</html>

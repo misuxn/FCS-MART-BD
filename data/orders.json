@@ -1,0 +1,84 @@
+[
+  {
+    "id": "022954ca-8560-423b-8f38-463304cc4d0a",
+    "userId": "cd753cae-62ca-4bea-9187-707614a50103",
+    "items": [
+      {
+        "productId": "p1",
+        "title": "Hoodies & Sweatshirt",
+        "price": 39.99,
+        "quantity": 1,
+        "subtotal": 39.99
+      }
+    ],
+    "total": 39.99,
+    "status": "cancelled",
+    "createdAt": "2026-04-23T07:33:33.826Z",
+    "updatedAt": "2026-04-23T08:30:13.855Z"
+  },
+  {
+    "id": "3891bb29-cc12-43a9-b75b-638a3bf62018",
+    "userId": "32fa0e49-c762-497b-88f0-1029ef4b7e98",
+    "items": [
+      {
+        "productId": "p2",
+        "title": "Coats & Parkas",
+        "price": 64.5,
+        "quantity": 1,
+        "subtotal": 64.5
+      }
+    ],
+    "total": 64.5,
+    "status": "pending",
+    "createdAt": "2026-04-23T08:12:51.175Z"
+  },
+  {
+    "id": "9f332a0b-04ff-4db3-ab6a-9f973106e984",
+    "userId": "cd753cae-62ca-4bea-9187-707614a50103",
+    "items": [
+      {
+        "productId": "p1",
+        "title": "Hoodies & Sweatshirt",
+        "price": 39.99,
+        "quantity": 1,
+        "subtotal": 39.99
+      }
+    ],
+    "total": 39.99,
+    "deliveryAddress": {
+      "fullName": "Test User",
+      "phone": "01700000000",
+      "addressLine": "House 10, Road 2",
+      "city": "Dhaka",
+      "postalCode": "1207"
+    },
+    "paymentMethod": "cash_on_delivery",
+    "status": "pending",
+    "createdAt": "2026-04-23T08:17:43.165Z"
+  },
+  {
+    "id": "7f763419-5529-4e08-8503-4f95d4acacb4",
+    "userId": "32fa0e49-c762-497b-88f0-1029ef4b7e98",
+    "items": [
+      {
+        "productId": "p1",
+        "title": "Hoodies & Sweatshirt",
+        "price": 39.99,
+        "quantity": 1,
+        "subtotal": 39.99
+      }
+    ],
+    "total": 39.99,
+    "deliveryAddress": {
+      "fullName": "Misu",
+      "phone": "01718580058",
+      "addressLine": "Dhaka",
+      "city": "Dhaka",
+      "postalCode": "1200"
+    },
+    "paymentMethod": "cash_on_delivery",
+    "status": "processing",
+    "createdAt": "2026-04-23T08:21:35.005Z",
+    "updatedAt": "2026-04-23T08:27:03.598Z"
+  }
+]

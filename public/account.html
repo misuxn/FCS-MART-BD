@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Account - FCS Mart BD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="account.css" />
+  </head>
+  <body>
+    <main class="account-shell">
+      <aside class="account-sidebar">
+        <div class="brand">
+          <img src="assets/logos/Vector.png" alt="Fashion logo" />
+          <span>FASHION</span>
+        </div>
+        <p class="account-subtitle">My Account</p>
+        <nav class="account-nav">
+          <a href="#profile">Profile</a>
+          <a href="#security">Security</a>
+          <a href="#orders">Orders</a>
+          <a href="#wishlist">Wishlist</a>
+        </nav>
+        <div class="sidebar-actions">
+          <a class="btn" href="/">Back to Store</a>
+          <button id="account-logout-btn" class="btn btn-dark" type="button">Sign Out</button>
+        </div>
+      </aside>
+
+      <section class="account-main">
+        <header class="account-header">
+          <h1>Account Settings</h1>
+          <p id="account-user-line">Loading user...</p>
+        </header>
+
+        <section class="stats-grid">
+          <article class="stat-card">
+            <p>Orders</p>
+            <h3 id="stat-orders">0</h3>
+          </article>
+          <article class="stat-card">
+            <p>Wishlist Items</p>
+            <h3 id="stat-wishlist">0</h3>
+          </article>
+          <article class="stat-card">
+            <p>Cart Items</p>
+            <h3 id="stat-cart">0</h3>
+          </article>
+          <article class="stat-card">
+            <p>Total Spent</p>
+            <h3 id="stat-spent">$0.00</h3>
+          </article>
+        </section>
+
+        <section id="profile" class="panel">
+          <h2>Profile</h2>
+          <form id="profile-form" class="form-grid" novalidate>
+            <label>
+              <span>Full Name</span>
+              <input id="profile-name" type="text" required />
+            </label>
+            <label>
+              <span>Email</span>
+              <input id="profile-email" type="email" required />
+            </label>
+            <button class="btn btn-dark" type="submit">Save Profile</button>
+          </form>
+        </section>
+
+        <section id="security" class="panel">
+          <h2>Security</h2>
+          <form id="password-form" class="form-grid" novalidate>
+            <label>
+              <span>Current Password</span>
+              <input id="current-password" type="password" required />
+            </label>
+            <label>
+              <span>New Password</span>
+              <input id="new-password" type="password" minlength="6" required />
+            </label>
+            <button class="btn btn-dark" type="submit">Update Password</button>
+          </form>
+        </section>
+
+        <section id="orders" class="panel">
+          <h2>Order History</h2>
+          <div id="orders-list" class="list"></div>
+        </section>
+
+        <section id="wishlist" class="panel">
+          <h2>Wishlist</h2>
+          <div id="wishlist-list" class="list"></div>
+        </section>
+
+        <p id="account-message" class="account-message" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <script src="account.js"></script>
+  </body>
+</html>

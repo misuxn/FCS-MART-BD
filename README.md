@@ -54,10 +54,11 @@ Fashion landing page with API-driven products, newsletter capture, and wishlist 
 
 - Import this repository in Vercel.
 - Framework preset: Other.
+- Root directory: repository root.
 - Build command: leave empty.
 - Install command: `npm install`
 - Output directory: leave empty.
-- Start command is not needed because `vercel.json` routes all traffic to `src/server.js`.
+- Start command is not needed because `vercel.json` routes all traffic to `api/index.js`.
 
 ### Render (alternative)
 

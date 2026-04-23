@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Manager - FCS Mart BD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body data-admin-page="orders">
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+          <img src="assets/logos/Vector.png" alt="Fashion logo" />
+          <span>FASHION ADMIN</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/admin.html">Product Manager</a>
+          <a class="active" href="/order-manager.html">Order Manager</a>
+          <a href="/">Back to Store</a>
+        </nav>
+      </aside>
+
+      <main class="admin-main">
+        <header class="admin-topbar">
+          <div>
+            <h1>Order Management</h1>
+            <p>Track, filter and update customer orders efficiently.</p>
+          </div>
+          <div class="topbar-actions">
+            <span id="admin-user-name"></span>
+            <button id="admin-logout-btn" class="btn btn-dark" type="button">Logout</button>
+          </div>
+        </header>
+
+        <section class="panel">
+          <h2>Order Management</h2>
+          <div id="admin-order-filters" class="admin-order-filters">
+            <button type="button" class="btn order-filter-btn is-active" data-status-filter="all">All</button>
+            <button type="button" class="btn order-filter-btn" data-status-filter="pending">Pending</button>
+            <button type="button" class="btn order-filter-btn" data-status-filter="processing">Processing</button>
+            <button type="button" class="btn order-filter-btn" data-status-filter="shipped">Shipped</button>
+            <button type="button" class="btn order-filter-btn" data-status-filter="delivered">Delivered</button>
+            <button type="button" class="btn order-filter-btn" data-status-filter="cancelled">Cancelled</button>
+          </div>
+          <div id="admin-orders-list" class="admin-orders-list"></div>
+          <p id="admin-message" class="admin-message" aria-live="polite"></p>
+        </section>
+      </main>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

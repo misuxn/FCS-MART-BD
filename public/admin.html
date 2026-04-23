@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - FCS Mart BD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body data-admin-page="products">
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+          <img src="assets/logos/Vector.png" alt="Fashion logo" />
+          <span>FASHION ADMIN</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a class="active" href="/admin.html">Product Manager</a>
+          <a href="/order-manager.html">Order Manager</a>
+          <a href="/">Back to Store</a>
+        </nav>
+      </aside>
+
+      <main class="admin-main">
+        <header class="admin-topbar">
+          <div>
+            <h1>Product Management</h1>
+            <p>Manage your catalog professionally from one dashboard.</p>
+          </div>
+          <div class="topbar-actions">
+            <span id="admin-user-name"></span>
+            <button id="admin-logout-btn" class="btn btn-dark" type="button">Logout</button>
+          </div>
+        </header>
+
+        <section class="panel">
+          <h2>Add / Edit Product</h2>
+          <form id="product-form" class="admin-form" novalidate>
+            <div class="field-grid">
+              <input id="product-title" type="text" placeholder="Product title" required />
+              <input id="product-category" type="text" placeholder="Category" required />
+              <input id="product-image" type="text" placeholder="Image path (e.g. assets/images/sectionsImages/Rectangle 20.png)" required />
+              <input id="product-price" type="number" min="0" step="0.01" placeholder="Price (optional)" />
+            </div>
+            <label class="feature-checkbox"><input id="product-featured" type="checkbox" /> Featured (Young’s Favourite)</label>
+            <div class="admin-actions">
+              <button id="product-submit-btn" class="btn btn-dark" type="submit">Add Product</button>
+              <button id="product-cancel-btn" class="btn" type="button" hidden>Cancel Edit</button>
+            </div>
+          </form>
+          <p id="admin-message" class="admin-message" aria-live="polite"></p>
+        </section>
+
+        <section class="panel">
+          <h2>Current Products</h2>
+          <div id="admin-products-list" class="admin-products-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

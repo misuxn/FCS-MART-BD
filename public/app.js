@@ -28,8 +28,25 @@ const favouriteGrid = document.getElementById('favourite-grid');
 const newsletterForm = document.getElementById('newsletter-form');
 const newsletterEmailInput = document.getElementById('newsletter-email');
 const newsletterMessage = document.getElementById('newsletter-message');
+const navAccountLink = document.getElementById('nav-account-link');
+const navSignupLink = document.getElementById('nav-signup-link');
+const navLoginLink = document.getElementById('nav-login-link');
+const navAdminLink = document.getElementById('nav-admin-link');
+const cartToggle = document.getElementById('cart-toggle');
+const cartModal = document.getElementById('cart-modal');
+const cartCloseBtn = document.getElementById('cart-close-btn');
+const cartItemsContainer = document.getElementById('cart-items');
+const cartTotalDisplay = document.getElementById('cart-total');
+const cartCountDisplay = document.getElementById('cart-count');
+const checkoutBtn = document.getElementById('checkout-btn');
+const cartMessage = document.getElementById('cart-message');
+const checkoutFullNameInput = document.getElementById('checkout-full-name');
+const checkoutPhoneInput = document.getElementById('checkout-phone');
+const checkoutAddressInput = document.getElementById('checkout-address');
+const checkoutCityInput = document.getElementById('checkout-city');
+const checkoutPostalInput = document.getElementById('checkout-postal');
+const checkoutPaymentMethodInput = document.getElementById('checkout-payment-method');
 
-const WISHLIST_KEY = 'fcsmart_wishlist';
 const API_BASES = [
   ...(window.location.protocol === 'http:' || window.location.protocol === 'https:'
     ? [`${window.location.origin}/api`]
@@ -37,21 +54,35 @@ const API_BASES = [
   'http://localhost:3000/api',
   'http://127.0.0.1:3000/api',
 ];
+
 let products = [];
 let wishlist = new Set();
+let cart = [];
+let currentUser = null;
 
-function loadWishlist() {
-  try {
-    const raw = localStorage.getItem(WISHLIST_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    wishlist = new Set(Array.isArray(parsed) ? parsed : []);
-  } catch {
-    wishlist = new Set();
+async function requestWithFallback(pathname, options = {}) {
+  let lastError;
+
+  for (const base of API_BASES) {
+    try {
+      const response = await fetch(`${base}${pathname}`, {
+        credentials: 'include',
+        ...options,
+      });
+
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(payload.message || `Request failed with status ${response.status}`);
+      }
+
+      return payload;
+    } catch (error) {
+      lastError = error;
+    }
   }
-}
 
-function persistWishlist() {
-  localStorage.setItem(WISHLIST_KEY, JSON.stringify([...wishlist]));
+  throw lastError || new Error('Request failed');
 }
 
 function formatPrice(price) {
@@ -61,51 +92,57 @@ function formatPrice(price) {
   return `$${price.toFixed(2)}`;
 }
 
-async function fetchJsonWithFallback(pathname, options) {
-  let lastError;
-
-  for (const base of API_BASES) {
-    try {
-      const res = await fetch(`${base}${pathname}`, options);
-      const payload = await res.json();
-      if (!res.ok) {
-        throw new Error(payload?.message || `Request failed with status ${res.status}`);
-      }
-      return payload;
-    } catch (error) {
-      lastError = error;
-    }
+function setNewsletterMessage(message, isError = false) {
+  if (!newsletterMessage) {
+    return;
   }
 
-  throw lastError || new Error('Request failed');
+  newsletterMessage.textContent = message;
+  newsletterMessage.classList.toggle('error', isError);
 }
 
-async function postJsonWithFallback(pathname, body) {
-  let lastError;
-
-  for (const base of API_BASES) {
-    try {
-      const res = await fetch(`${base}${pathname}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-
-      const payload = await res.json();
-
-      if (!res.ok) {
-        throw new Error(payload?.message || `Request failed with status ${res.status}`);
-      }
-
-      return payload;
-    } catch (error) {
-      lastError = error;
-    }
+function setCartMessage(message, isError = false) {
+  if (!cartMessage) {
+    return;
   }
 
-  throw lastError || new Error('Request failed');
+  cartMessage.textContent = message;
+  cartMessage.classList.toggle('error', isError);
+  if (!isError) {
+    setTimeout(() => {
+      cartMessage.textContent = '';
+    }, 2000);
+  }
+}
+
+function isValidEmail(email) {
+  const value = String(email || '').trim();
+  if (!value) {
+    return false;
+  }
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value);
+}
+
+function renderHeaderUI() {
+  if (navAccountLink) {
+    navAccountLink.hidden = !currentUser;
+  }
+
+  if (navAdminLink) {
+    navAdminLink.hidden = !currentUser || currentUser.role !== 'admin';
+  }
+
+  if (navLoginLink) {
+    navLoginLink.hidden = !!currentUser;
+  }
+
+  if (navSignupLink) {
+    navSignupLink.hidden = !!currentUser;
+  }
+
+  if (cartToggle) {
+    cartToggle.hidden = !currentUser;
+  }
 }
 
 function createProductCard(product) {
@@ -125,7 +162,7 @@ function createProductCard(product) {
         <p class="card-meta">${product.category}</p>
         ${product.price ? `<p class="price">${formatPrice(product.price)}</p>` : ''}
       </div>
-      <span class="arrow">→</span>
+      <button class="btn btn-sm add-to-cart-btn" type="button" data-product-id="${product.id}">Add to Cart</button>
     </div>
   `;
 
@@ -152,13 +189,19 @@ function renderProducts() {
   });
 }
 
+async function loadCurrentUser() {
+  const payload = await requestWithFallback('/auth/me');
+  currentUser = payload.user || null;
+  renderHeaderUI();
+}
+
 async function loadProducts() {
   if (!newArrivalsGrid || !favouriteGrid) {
     return;
   }
 
   try {
-    const data = await fetchJsonWithFallback('/products');
+    const data = await requestWithFallback('/products');
     products = Array.isArray(data.products) ? data.products : [];
     renderProducts();
   } catch {
@@ -167,7 +210,89 @@ async function loadProducts() {
   }
 }
 
-function handleWishlistClick(event) {
+async function loadWishlist() {
+  if (!currentUser) {
+    wishlist = new Set();
+    return;
+  }
+
+  try {
+    const data = await requestWithFallback('/wishlist');
+    wishlist = new Set(Array.isArray(data.wishlist) ? data.wishlist : []);
+  } catch {
+    wishlist = new Set();
+  }
+}
+
+async function loadCart() {
+  if (!currentUser) {
+    cart = [];
+    renderCart();
+    return;
+  }
+
+  try {
+    const data = await requestWithFallback('/cart');
+    cart = Array.isArray(data.cart) ? data.cart : [];
+    renderCart();
+  } catch {
+    cart = [];
+    renderCart();
+  }
+}
+
+function renderCart() {
+  if (!cartItemsContainer) {
+    return;
+  }
+
+  cartItemsContainer.innerHTML = '';
+
+  if (cart.length === 0) {
+    cartItemsContainer.innerHTML = '<p style="padding: 1rem; text-align: center;">Your cart is empty</p>';
+    if (checkoutBtn) checkoutBtn.disabled = true;
+    return;
+  }
+
+  if (checkoutBtn) checkoutBtn.disabled = false;
+
+  let total = 0;
+  cart.forEach((item) => {
+    total += item.subtotal;
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'cart-item';
+    itemDiv.innerHTML = `
+      <div class="cart-item-info">
+        <h4>${item.title}</h4>
+        <p>${item.quantity} x ${formatPrice(item.price)} = <strong>${formatPrice(item.subtotal)}</strong></p>
+      </div>
+      <button class="btn btn-sm remove-cart-item-btn" type="button" data-product-id="${item.productId}">Remove</button>
+    `;
+    cartItemsContainer.appendChild(itemDiv);
+  });
+
+  if (cartTotalDisplay) {
+    cartTotalDisplay.textContent = formatPrice(total);
+  }
+
+  if (cartCountDisplay) {
+    cartCountDisplay.textContent = cart.length;
+  }
+}
+
+function openCart() {
+  if (cartModal) {
+    cartModal.hidden = false;
+  }
+}
+
+function closeCart() {
+  if (cartModal) {
+    cartModal.hidden = true;
+  }
+}
+
+async function handleWishlistClick(event) {
   const button = event.target.closest('.fav-btn');
   if (!button) {
     return;
@@ -178,31 +303,129 @@ function handleWishlistClick(event) {
     return;
   }
 
-  if (wishlist.has(productId)) {
-    wishlist.delete(productId);
-  } else {
-    wishlist.add(productId);
-  }
-
-  persistWishlist();
-  renderProducts();
-}
-
-function setNewsletterMessage(message, isError = false) {
-  if (!newsletterMessage) {
+  if (!currentUser) {
+    window.location.href = '/login.html';
     return;
   }
 
-  newsletterMessage.textContent = message;
-  newsletterMessage.classList.toggle('error', isError);
+  try {
+    const data = await requestWithFallback('/wishlist/toggle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId }),
+    });
+    wishlist = new Set(Array.isArray(data.wishlist) ? data.wishlist : []);
+    renderProducts();
+  } catch {
+    window.location.href = '/login.html';
+  }
 }
 
-function isValidEmail(email) {
-  const value = String(email || '').trim();
-  if (!value) {
-    return false;
+async function handleAddToCart(event) {
+  const button = event.target.closest('.add-to-cart-btn');
+  if (!button) {
+    return;
   }
-  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value);
+
+  const productId = button.dataset.productId;
+  if (!productId) {
+    return;
+  }
+
+  if (!currentUser) {
+    window.location.href = '/login.html';
+    return;
+  }
+
+  try {
+    await requestWithFallback('/cart', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId, quantity: 1 }),
+    });
+    await loadCart();
+    setCartMessage('Added to cart!');
+  } catch (error) {
+    setCartMessage(error.message || 'Unable to add to cart', true);
+  }
+}
+
+async function handleRemoveFromCart(event) {
+  const button = event.target.closest('.remove-cart-item-btn');
+  if (!button) {
+    return;
+  }
+
+  const productId = button.dataset.productId;
+  if (!productId) {
+    return;
+  }
+
+  try {
+    await requestWithFallback(`/cart/${productId}`, {
+      method: 'DELETE',
+    });
+    await loadCart();
+    setCartMessage('Removed from cart');
+  } catch (error) {
+    setCartMessage(error.message || 'Unable to remove from cart', true);
+  }
+}
+
+async function handleCheckout() {
+  if (!currentUser) {
+    window.location.href = '/login.html';
+    return;
+  }
+
+  if (cart.length === 0) {
+    setCartMessage('Cart is empty', true);
+    return;
+  }
+
+  const deliveryAddress = {
+    fullName: checkoutFullNameInput?.value.trim() || '',
+    phone: checkoutPhoneInput?.value.trim() || '',
+    addressLine: checkoutAddressInput?.value.trim() || '',
+    city: checkoutCityInput?.value.trim() || '',
+    postalCode: checkoutPostalInput?.value.trim() || '',
+  };
+  const paymentMethod = checkoutPaymentMethodInput?.value || '';
+
+  if (!deliveryAddress.fullName || !deliveryAddress.phone || !deliveryAddress.addressLine || !deliveryAddress.city || !deliveryAddress.postalCode) {
+    setCartMessage('Please fill in complete delivery address details.', true);
+    return;
+  }
+
+  if (!paymentMethod) {
+    setCartMessage('Please select a payment method.', true);
+    return;
+  }
+
+  try {
+    await requestWithFallback('/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        deliveryAddress,
+        paymentMethod,
+      }),
+    });
+
+    setCartMessage('Order placed successfully! 🎉');
+    if (checkoutFullNameInput) checkoutFullNameInput.value = '';
+    if (checkoutPhoneInput) checkoutPhoneInput.value = '';
+    if (checkoutAddressInput) checkoutAddressInput.value = '';
+    if (checkoutCityInput) checkoutCityInput.value = '';
+    if (checkoutPostalInput) checkoutPostalInput.value = '';
+    if (checkoutPaymentMethodInput) checkoutPaymentMethodInput.value = '';
+    await loadCart();
+    setTimeout(() => {
+      closeCart();
+    }, 2000);
+  } catch (error) {
+    setCartMessage(error.message || 'Unable to place order', true);
+  }
 }
 
 async function handleNewsletterSubmit(event) {
@@ -225,7 +448,11 @@ async function handleNewsletterSubmit(event) {
   }
 
   try {
-    const res = await postJsonWithFallback('/newsletter', { email });
+    const res = await requestWithFallback('/newsletter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
 
     setNewsletterMessage(res.message || 'Subscribed successfully!');
     newsletterEmailInput.value = '';
@@ -234,11 +461,43 @@ async function handleNewsletterSubmit(event) {
   }
 }
 
-loadWishlist();
-loadProducts();
+function bindEvents() {
+  document.addEventListener('click', handleWishlistClick);
+  document.addEventListener('click', handleAddToCart);
+  document.addEventListener('click', handleRemoveFromCart);
 
-document.addEventListener('click', handleWishlistClick);
+  if (cartToggle) {
+    cartToggle.addEventListener('click', openCart);
+  }
 
-if (newsletterForm) {
-  newsletterForm.addEventListener('submit', handleNewsletterSubmit);
+  if (cartCloseBtn) {
+    cartCloseBtn.addEventListener('click', closeCart);
+  }
+
+  if (cartModal) {
+    cartModal.addEventListener('click', (event) => {
+      if (event.target === cartModal) {
+        closeCart();
+      }
+    });
+  }
+
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', handleCheckout);
+  }
+
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', handleNewsletterSubmit);
+  }
 }
+
+async function initialize() {
+  bindEvents();
+  await loadCurrentUser();
+  await loadProducts();
+  await loadWishlist();
+  await loadCart();
+  renderProducts();
+}
+
+initialize();
