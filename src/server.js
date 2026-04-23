@@ -1,7 +1,6 @@
 const express = require('express');
 const fs = require('fs/promises');
 const path = require('path');
-const session = require('express-session');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
@@ -17,6 +16,8 @@ const cartsPath = path.join(rootDir, 'data', 'carts.json');
 const ordersPath = path.join(rootDir, 'data', 'orders.json');
 
 const SESSION_SECRET = process.env.SESSION_SECRET || 'change-this-secret-in-production';
+const AUTH_COOKIE_NAME = 'fcs_auth';
+const AUTH_COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 24;
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -31,19 +32,153 @@ app.use((req, res, next) => {
   return next();
 });
 
-app.use(
-  session({
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
-      maxAge: 1000 * 60 * 60 * 24,
+function isSecureRequest(req) {
+  return req.secure || String(req.headers['x-forwarded-proto'] || '').toLowerCase() === 'https';
+}
+
+function base64UrlEncode(value) {
+  return Buffer.from(value, 'utf8').toString('base64url');
+}
+
+function base64UrlDecode(value) {
+  return Buffer.from(value, 'base64url').toString('utf8');
+}
+
+function parseCookieHeader(header = '') {
+  return header.split(';').reduce((cookies, part) => {
+    const index = part.indexOf('=');
+    if (index === -1) {
+      return cookies;
+    }
+
+    const name = part.slice(0, index).trim();
+    const value = part.slice(index + 1).trim();
+    if (name) {
+      cookies[name] = value;
+    }
+    return cookies;
+  }, {});
+}
+
+function signAuthPayload(payload) {
+  return crypto
+    .createHmac('sha256', SESSION_SECRET)
+    .update(payload)
+    .digest('base64url');
+}
+
+function createAuthToken(sessionData) {
+  const payload = JSON.stringify({
+    userId: sessionData.userId,
+    role: sessionData.role,
+    exp: Date.now() + AUTH_COOKIE_MAX_AGE_MS,
+  });
+  const encodedPayload = base64UrlEncode(payload);
+  const signature = signAuthPayload(encodedPayload);
+  return `${encodedPayload}.${signature}`;
+}
+
+function readAuthToken(token) {
+  if (!token || typeof token !== 'string') {
+    return null;
+  }
+
+  const [encodedPayload, signature] = token.split('.');
+  if (!encodedPayload || !signature) {
+    return null;
+  }
+
+  const expectedSignature = signAuthPayload(encodedPayload);
+  if (signature !== expectedSignature) {
+    return null;
+  }
+
+  try {
+    const payload = JSON.parse(base64UrlDecode(encodedPayload));
+    if (!payload.userId || !payload.role || !payload.exp || payload.exp < Date.now()) {
+      return null;
+    }
+    return {
+      userId: payload.userId,
+      role: payload.role,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function serializeAuthCookie(token, maxAgeMs, secure) {
+  const parts = [
+    `${AUTH_COOKIE_NAME}=${token}`,
+    'Path=/',
+    'HttpOnly',
+    'SameSite=Lax',
+  ];
+
+  if (secure) {
+    parts.push('Secure');
+  }
+
+  if (typeof maxAgeMs === 'number') {
+    parts.push(`Max-Age=${Math.max(0, Math.floor(maxAgeMs / 1000))}`);
+  }
+
+  return parts.join('; ');
+}
+
+function attachAuthSession(req, res, next) {
+  const cookies = parseCookieHeader(req.headers.cookie || '');
+  const auth = readAuthToken(cookies[AUTH_COOKIE_NAME]);
+  const sessionState = auth ? { ...auth } : {};
+  let isDestroyed = false;
+  let isDirty = false;
+
+  const sessionProxy = new Proxy(sessionState, {
+    set(target, property, value) {
+      target[property] = value;
+      isDirty = true;
+      return true;
     },
-  })
-);
+    deleteProperty(target, property) {
+      if (property in target) {
+        delete target[property];
+        isDirty = true;
+      }
+      return true;
+    },
+  });
+
+  sessionProxy.destroy = (callback) => {
+    isDestroyed = true;
+    Object.keys(sessionState).forEach((key) => {
+      delete sessionState[key];
+    });
+    if (typeof callback === 'function') {
+      callback();
+    }
+  };
+
+  req.session = sessionProxy;
+
+  const originalEnd = res.end;
+  res.end = function endWithAuthCookie(...args) {
+    if (isDestroyed) {
+      res.setHeader('Set-Cookie', serializeAuthCookie('', 0, isSecureRequest(req)));
+    } else if (isDirty && req.session.userId && req.session.role) {
+      const token = createAuthToken({
+        userId: req.session.userId,
+        role: req.session.role,
+      });
+      res.setHeader('Set-Cookie', serializeAuthCookie(token, AUTH_COOKIE_MAX_AGE_MS, isSecureRequest(req)));
+    }
+
+    return originalEnd.apply(this, args);
+  };
+
+  next();
+}
+
+app.use(attachAuthSession);
 
 app.use('/admin.html', requireAdminPage);
 app.use('/order-manager.html', requireAdminPage);
