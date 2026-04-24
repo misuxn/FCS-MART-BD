@@ -4,9 +4,19 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
+let kv = null;
+try {
+  ({ kv } = require('@vercel/kv'));
+} catch {
+  kv = null;
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const isServerless = !!process.env.VERCEL;
+const hasKvStorage = Boolean(kv && process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+const storagePrefix = process.env.STORAGE_PREFIX || 'fcsmart';
+const inMemoryStore = new Map();
 const rootDir = path.join(__dirname, '..');
 const productsPath = path.join(rootDir, 'data', 'products.json');
 const newsletterPath = path.join(rootDir, 'data', 'newsletter-emails.json');
@@ -188,16 +198,81 @@ app.use(express.static(path.join(rootDir, 'public')));
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
 async function readJson(filePath, fallback) {
+  const key = getStorageKey(filePath);
+
+  if (hasKvStorage) {
+    try {
+      const raw = await kvGet(key);
+      if (raw === null || typeof raw === 'undefined') {
+        return fallback;
+      }
+
+      if (typeof raw === 'string') {
+        return JSON.parse(raw);
+      }
+
+      return raw;
+    } catch {
+      // Continue to file and in-memory fallback.
+    }
+  }
+
   try {
     const raw = await fs.readFile(filePath, 'utf-8');
     return JSON.parse(raw);
   } catch {
+    if (inMemoryStore.has(key)) {
+      return inMemoryStore.get(key);
+    }
     return fallback;
   }
 }
 
 async function writeJson(filePath, value) {
-  await fs.writeFile(filePath, JSON.stringify(value, null, 2));
+  const key = getStorageKey(filePath);
+  inMemoryStore.set(key, value);
+
+  if (hasKvStorage) {
+    await kvSet(key, JSON.stringify(value));
+    return;
+  }
+
+  try {
+    await fs.writeFile(filePath, JSON.stringify(value, null, 2));
+  } catch (error) {
+    // Vercel serverless file system is read-only, so keep runtime state in memory.
+    if (!isServerless) {
+      throw error;
+    }
+  }
+}
+
+function getStorageKey(filePath) {
+  return `${storagePrefix}:${path.basename(filePath)}`;
+}
+
+async function kvCommand(command, ...args) {
+  if (!hasKvStorage) {
+    return null;
+  }
+
+  if (command === 'get') {
+    return kv.get(args[0]);
+  }
+
+  if (command === 'set') {
+    return kv.set(args[0], args[1]);
+  }
+
+  throw new Error(`Unsupported KV command: ${command}`);
+}
+
+async function kvGet(key) {
+  return kvCommand('get', key);
+}
+
+async function kvSet(key, value) {
+  return kvCommand('set', key, value);
 }
 
 function sanitizeUser(user) {
@@ -758,11 +833,7 @@ app.post('/api/newsletter', async (req, res) => {
     createdAt: new Date().toISOString(),
   });
 
-  try {
-    await writeJson(newsletterPath, rows);
-  } catch {
-    return res.status(503).json({ message: 'Storage is not writable in this deployment. Use a database service.' });
-  }
+  await writeJson(newsletterPath, rows);
 
   return res.status(201).json({ message: 'Subscribed successfully!' });
 });
