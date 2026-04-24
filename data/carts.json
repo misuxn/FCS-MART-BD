@@ -1,4 +1,13 @@
 {
   "cd753cae-62ca-4bea-9187-707614a50103": [],
-  "32fa0e49-c762-497b-88f0-1029ef4b7e98": []
+  "32fa0e49-c762-497b-88f0-1029ef4b7e98": [
+    {
+      "productId": "p2",
+      "quantity": 1
+    },
+    {
+      "productId": "p3",
+      "quantity": 1
+    }
+  ]
 }

@@ -60,6 +60,54 @@ let wishlist = new Set();
 let cart = [];
 let currentUser = null;
 
+function getLocalStorageKey(kind) {
+  if (!currentUser?.id) {
+    return null;
+  }
+  return `fcsmart_${kind}_${currentUser.id}`;
+}
+
+function readLocalStorageList(kind) {
+  const key = getLocalStorageKey(kind);
+  if (!key) {
+    return [];
+  }
+
+  try {
+    const raw = window.localStorage.getItem(key);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalStorageList(kind, value) {
+  const key = getLocalStorageKey(kind);
+  if (!key) {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // Ignore storage failures in browsers that block localStorage.
+  }
+}
+
+function syncWishlistFromSource(ids) {
+  const normalized = Array.isArray(ids) ? ids : [];
+  wishlist = new Set(normalized);
+  writeLocalStorageList('wishlist', normalized);
+  renderProducts();
+}
+
+function syncCartFromSource(items) {
+  cart = Array.isArray(items) ? items : [];
+  writeLocalStorageList('cart', cart);
+  renderCart();
+}
+
 async function requestWithFallback(pathname, options = {}) {
   let lastError;
 
@@ -218,9 +266,11 @@ async function loadWishlist() {
 
   try {
     const data = await requestWithFallback('/wishlist');
-    wishlist = new Set(Array.isArray(data.wishlist) ? data.wishlist : []);
+    const serverWishlist = Array.isArray(data.wishlist) ? data.wishlist : [];
+    const localWishlist = readLocalStorageList('wishlist');
+    syncWishlistFromSource(localWishlist.length ? localWishlist : serverWishlist);
   } catch {
-    wishlist = new Set();
+    syncWishlistFromSource(readLocalStorageList('wishlist'));
   }
 }
 
@@ -233,11 +283,11 @@ async function loadCart() {
 
   try {
     const data = await requestWithFallback('/cart');
-    cart = Array.isArray(data.cart) ? data.cart : [];
-    renderCart();
+    const serverCart = Array.isArray(data.cart) ? data.cart : [];
+    const localCart = readLocalStorageList('cart');
+    syncCartFromSource(localCart.length ? localCart : serverCart);
   } catch {
-    cart = [];
-    renderCart();
+    syncCartFromSource(readLocalStorageList('cart'));
   }
 }
 
@@ -314,10 +364,15 @@ async function handleWishlistClick(event) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ productId }),
     });
-    wishlist = new Set(Array.isArray(data.wishlist) ? data.wishlist : []);
-    renderProducts();
+    syncWishlistFromSource(Array.isArray(data.wishlist) ? data.wishlist : []);
   } catch {
-    window.location.href = '/login.html';
+    const nextWishlist = new Set(readLocalStorageList('wishlist'));
+    if (nextWishlist.has(productId)) {
+      nextWishlist.delete(productId);
+    } else {
+      nextWishlist.add(productId);
+    }
+    syncWishlistFromSource([...nextWishlist]);
   }
 }
 
@@ -346,7 +401,22 @@ async function handleAddToCart(event) {
     await loadCart();
     setCartMessage('Added to cart!');
   } catch (error) {
-    setCartMessage(error.message || 'Unable to add to cart', true);
+    const nextCart = readLocalStorageList('cart').map((item) => ({ ...item }));
+    const existingItem = nextCart.find((item) => item.productId === productId);
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      const product = products.find((item) => item.id === productId);
+      nextCart.push({
+        productId,
+        quantity: 1,
+        title: product?.title || 'Unknown',
+        price: Number(product?.price || 0),
+        subtotal: Number(product?.price || 0),
+      });
+    }
+    syncCartFromSource(nextCart);
+    setCartMessage('Added to cart!');
   }
 }
 
@@ -368,7 +438,9 @@ async function handleRemoveFromCart(event) {
     await loadCart();
     setCartMessage('Removed from cart');
   } catch (error) {
-    setCartMessage(error.message || 'Unable to remove from cart', true);
+    const nextCart = readLocalStorageList('cart').filter((item) => item.productId !== productId);
+    syncCartFromSource(nextCart);
+    setCartMessage('Removed from cart');
   }
 }
 
